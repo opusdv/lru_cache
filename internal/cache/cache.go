@@ -19,6 +19,14 @@ type LRU struct {
 	queue    *list.List
 }
 
+func NewLRUCache(n int) LRUCache {
+	return &LRU{
+		capacity: n,
+		items:    make(map[string]*list.Element),
+		queue:    list.New(),
+	}
+}
+
 func (c *LRU) Add(key, value string) bool {
 	if el, ok := c.items[key]; ok {
 		c.queue.MoveToFront(el)
