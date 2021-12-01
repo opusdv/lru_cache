@@ -1,11 +1,14 @@
 package cache
 
-import "container/list"
+import (
+	"container/list"
+	"fmt"
+)
 
 type LRUCache interface {
 	Add(key, value string) bool
 	Get(key string) (value string, ok bool)
-	Remove() (ok bool)
+	Remove(key string) (ok bool)
 }
 
 type Item struct {
@@ -22,7 +25,7 @@ type LRU struct {
 func NewLRUCache(n int) LRUCache {
 	return &LRU{
 		capacity: n,
-		items:    make(map[string]*list.Element),
+		items:    make(map[string]*list.Element, n),
 		queue:    list.New(),
 	}
 }
@@ -34,8 +37,9 @@ func (c *LRU) Add(key, value string) bool {
 		return true
 	}
 
-	if c.queue.Len() == c.capacity {
-		c.Remove()
+	if c.queue.Len() >= c.capacity {
+		k := c.queue.Back().Value.(*Item)
+		c.Remove(k.Value)
 	}
 
 	item := &Item{
@@ -49,11 +53,9 @@ func (c *LRU) Add(key, value string) bool {
 	return true
 }
 
-func (c *LRU) Remove() (ok bool) {
-	if element := c.queue.Back(); element != nil {
-		item := c.queue.Remove(element).(*Item)
-		delete(c.items, item.Key)
-	}
+func (c *LRU) Remove(key string) (ok bool) {
+	fmt.Println("Remove element")
+	delete(c.items, key)
 	return true
 }
 
