@@ -38,8 +38,10 @@ func (c *LRU) Add(key, value string) bool {
 	}
 
 	if c.queue.Len() >= c.capacity {
-		k := c.queue.Back().Value.(*Item)
-		c.Remove(k.Value)
+		if element := c.queue.Back(); element != nil {
+			item := c.queue.Remove(element).(*Item)
+			c.Remove(item.Key)
+		}
 	}
 
 	item := &Item{
@@ -54,7 +56,7 @@ func (c *LRU) Add(key, value string) bool {
 }
 
 func (c *LRU) Remove(key string) (ok bool) {
-	fmt.Println("Remove element")
+	fmt.Printf("Remove element %s\n", key)
 	delete(c.items, key)
 	return true
 }
