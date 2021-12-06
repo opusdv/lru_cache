@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/opusdv/lru_cache/internal/cache"
+	"github.com/opusdv/lru_cache/pkg/cache"
 )
 
 var testData = map[string]string{

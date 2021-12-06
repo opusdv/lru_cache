@@ -34,7 +34,7 @@ func (c *LRU) Add(key, value string) bool {
 	if el, ok := c.items[key]; ok {
 		c.queue.MoveToFront(el)
 		el.Value.(*Item).Value = value
-		return true
+		return false
 	}
 
 	if c.queue.Len() >= c.capacity {
