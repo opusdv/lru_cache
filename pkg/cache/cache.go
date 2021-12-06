@@ -23,6 +23,7 @@ type LRU struct {
 }
 
 func NewLRUCache(n int) LRUCache {
+
 	return &LRU{
 		capacity: n,
 		items:    make(map[string]*list.Element, n),
