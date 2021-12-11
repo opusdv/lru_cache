@@ -33,15 +33,14 @@ func NewLRUCache(n int) LRUCache {
 
 func (c *LRU) Add(key, value string) bool {
 	if el, ok := c.items[key]; ok {
-		c.queue.MoveToFront(el)
 		el.Value.(*Item).Value = value
 		return false
 	}
 
 	if c.queue.Len() >= c.capacity {
 		if element := c.queue.Back(); element != nil {
-			item := c.queue.Remove(element).(*Item)
-			c.Remove(item.Key)
+			key := element.Value.(*Item).Key
+			c.Remove(key)
 		}
 	}
 
@@ -52,13 +51,19 @@ func (c *LRU) Add(key, value string) bool {
 
 	el := c.queue.PushFront(item)
 	c.items[item.Key] = el
-
 	return true
 }
 
 func (c *LRU) Remove(key string) (ok bool) {
+	if key == "" {
+		return false
+	}
 	fmt.Printf("Remove element %s\n", key)
+
+	c.queue.Remove(c.queue.Back())
 	delete(c.items, key)
+	fmt.Println(c.queue.Len())
+	fmt.Println(c.items)
 	return true
 }
 
