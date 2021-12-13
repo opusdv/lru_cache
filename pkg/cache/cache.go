@@ -59,8 +59,7 @@ func (c *LRU) Remove(key string) (ok bool) {
 		return false
 	}
 	fmt.Printf("Remove element %s\n", key)
-
-	c.queue.Remove(c.queue.Back())
+	c.queue.Remove(c.items[key])
 	delete(c.items, key)
 	fmt.Println(c.queue.Len())
 	fmt.Println(c.items)
